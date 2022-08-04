@@ -8,8 +8,10 @@ const MeasurementLight = connection.define('measurement_light', {
 		autoIncrement: true,
 		type: Sequelize.INTEGER,
 	},
-	lightOn: Sequelize.BOOLEAN,
-	registeredDate: Sequelize.DATE,
+	lightOn: {
+        type: Sequelize.BOOLEAN,
+        field: 'light_on'
+    },
 	greenhouseId: {
 		field: 'FK_greenhouses_id',
 		type: Sequelize.INTEGER,

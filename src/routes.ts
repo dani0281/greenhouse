@@ -1,9 +1,20 @@
 import { Router } from 'express';
-import Device from './database/models/device';
 import MeasurementTemperature from './database/models/measurements_temperature';
 import MeasurementLight from './database/models/measurements_light';
 
 const routes = Router();
+
+routes.get('/measurements_temperature/get', (req, res) => {
+	MeasurementTemperature.findAll().then((measurementTemp) => {
+		return res.json(measurementTemp);
+	})
+});
+
+routes.get('/measurements_light/get', (req, res) => {
+	MeasurementLight.findAll().then((measurementLight) => {
+		return res.json(measurementLight);
+	})
+});
 
 routes.post('/measurements_temperature/create', (req, res) => {
 	MeasurementTemperature.create(req.body).then((measurement) => {

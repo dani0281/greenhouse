@@ -9,7 +9,6 @@ const MeasurementTemperature = connection.define('measurement_temperature', {
 		type: Sequelize.INTEGER,
 	},
 	temperature: Sequelize.DOUBLE,
-	registeredDate: Sequelize.DATE,
 	greenhouseId: {
 		field: 'FK_greenhouses_id',
 		type: Sequelize.INTEGER,
