@@ -1,12 +1,13 @@
-import Sequelize from "sequelize";
-import connection from "../connection";
+import Sequelize from 'sequelize';
+import connection from '../connection';
 
 const Device = connection.define('devices', {
-    id: {
-        primaryKey: true,
-        type: Sequelize.INTEGER
-    },
-    hostname: Sequelize.STRING
-})
+	id: {
+		primaryKey: true,
+		autoIncrement: true,
+		type: Sequelize.INTEGER,
+	},
+	hostname: Sequelize.STRING,
+});
 
-export default Device
+export default Device;
