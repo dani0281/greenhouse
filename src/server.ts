@@ -7,6 +7,8 @@ import connection from './database/connection';
 
 const client = mqtt.connect('mqtt://192.168.1.2:1883', {
 	connectTimeout: 35000,
+	username: 'dk25',
+	password: 'dk25Pass',
 });
 
 const temperatureTopic = 'temperature';
