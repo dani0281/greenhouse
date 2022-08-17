@@ -4,6 +4,7 @@ import Greenhouse from './database/models/greenhouse';
 import MeasurementLight from './database/models/measurements_light';
 import MeasurementTemperature from './database/models/measurements_temperature';
 import connection from './database/connection';
+import MeasurementHumidity from './database/models/measurements_humidity';
 
 const client = mqtt.connect('mqtt://192.168.1.2:1883', {
 	connectTimeout: 35000,
@@ -13,6 +14,7 @@ const client = mqtt.connect('mqtt://192.168.1.2:1883', {
 
 const temperatureTopic = 'temperature';
 const lightTopic = 'light';
+const humidityTopic = 'humidity';
 
 const temperatureCallback = (deviceId: string, message: string) => {
 	if (isNaN(Number(message))) return;
@@ -52,6 +54,25 @@ const lightCallback = (deviceId: string, message: string) => {
 	});
 };
 
+const humidityCallback = (deviceId: string, message: string) => {
+	if (isNaN(Number(message))) return;
+
+	Device.findOne({ where: { hostname: deviceId } }).then((device) => {
+		if (device) {
+			Greenhouse.findOne({ where: { deviceId: (device as any).id } }).then(
+				(greenhouse) => {
+					if (greenhouse) {
+						MeasurementHumidity.create({
+							greenhouseId: (greenhouse as any).id,
+							humidity: Number(message),
+						});
+					}
+				},
+			);
+		}
+	});
+};
+
 interface Endpoint {
 	key: string;
 	topic: string;
@@ -65,6 +86,11 @@ const endpoints: Endpoint[] = [
 		callback: temperatureCallback,
 	},
 	{ key: lightTopic, topic: `${lightTopic}/+`, callback: lightCallback },
+	{
+		key: humidityTopic,
+		topic: `${humidityTopic}/+`,
+		callback: humidityCallback,
+	},
 ];
 
 client.on('connect', async () => {
